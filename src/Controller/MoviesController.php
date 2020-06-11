@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use GuzzleHttp;
 
@@ -15,23 +16,21 @@ class MoviesController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function index(Request $request)
     {
         $key = $_ENV['API_KEY'];
-        $title = 'comedy';
+        $search = $request->get('s');
 
         $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', 'http://www.omdbapi.com/?apikey=' . $key . '&t=' .$title, [
+        $res = $client->request('GET', 'http://www.omdbapi.com/?apikey=' . $key . '&s=' .$search, [
             'headers' => [
                 'User-Agent' => 'testing/1.0',
                 'Accept' => 'application/json',
             ]
         ]);
 
-        return $this->json([
-            'data' => $res
-        ]);
+        $resDecode = json_decode($res->getBody()->getContents());
 
+        return $this->json([$resDecode]);
     }
-
 }
