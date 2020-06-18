@@ -22,7 +22,7 @@ class MoviesController extends AbstractController
         $search = $request->get('s');
 
         $client = new GuzzleHttp\Client();
-        $res = $client->request('GET', 'http://www.omdbapi.com/?apikey=' . $key . '&s=' .$search, [
+        $res = $client->request('GET', 'http://www.omdbapi.com/?apikey=' . $key . '/?s=' .$search, [
             'headers' => [
                 'User-Agent' => 'testing/1.0',
                 'Accept' => 'application/json',
